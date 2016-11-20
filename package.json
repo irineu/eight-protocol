@@ -1,0 +1,21 @@
+{
+  "name": "eight-protocol",
+  "version": "1.0.28",
+  "description": "8 bytes protocol",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-uuid": "^1.4.3"
+  },
+
+  "devDependencies": {
+    "mocha": "^3.1.2"
+  }
+}
