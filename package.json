@@ -9,7 +9,7 @@
   "scripts": {
     "test": "mocha"
   },
-  "author": "",
+  "author": "Irineu Antunes",
   "license": "ISC",
   "dependencies": {
     "node-uuid": "^1.4.3"

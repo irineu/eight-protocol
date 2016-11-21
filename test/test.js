@@ -117,8 +117,7 @@ describe("Client/Server", function(){
 					assert.equal(socket.id, s.id);
 					done();
 				});
-
-			})
+			});
 
 			client = new protocol.client("0.0.0.0", serverPort);
 			client.once('client_connected', function(socket){
