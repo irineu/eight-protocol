@@ -1,6 +1,6 @@
 {
   "name": "eight-protocol",
-  "version": "1.0.28",
+  "version": "1.0.30",
   "description": "8 bytes protocol",
   "main": "index.js",
   "scripts": {
