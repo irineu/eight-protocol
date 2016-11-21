@@ -87,7 +87,7 @@ describe("Client/Server", function(){
 	});
 
 	describe('#client:onDisconnect()', function() {
-		it('should reconize when a client disconnect', function(done) {
+		it('should reconize when the server disconnect a client', function(done) {
 			this.timeout(1000);
 			client = new protocol.client("0.0.0.0", serverPort);
 
@@ -103,6 +103,30 @@ describe("Client/Server", function(){
 				client.once("client_end", function(){
 					done();
 				});
+			});
+		});
+	});
+
+	describe('#server:onDisconnect()', function() {
+		it('should reconize when a client disconnect from the server', function(done) {
+			this.timeout(5000);
+
+			server.instance.once("client_connected", function(socket){
+				var s = socket;
+				server.instance.once("client_end", function(socket){
+					assert.equal(socket.id, s.id);
+					done();
+				});
+
+			})
+
+			client = new protocol.client("0.0.0.0", serverPort);
+			client.once('client_connected', function(socket){
+				
+				setTimeout(function(){
+					socket.end();
+				},200);
+				
 			});
 		});
 	});
