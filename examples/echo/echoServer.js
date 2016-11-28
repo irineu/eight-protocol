@@ -2,8 +2,8 @@
 //IT WILL NOT WORK WITH TELNET CLIENT!!!
 ////////////////////////////////////////
 
-var constants = require("./helpers/constants");
-var protocol = require("../index");
+var constants = require("../helpers/constants");
+var protocol = require("../../index");
 
 var server =  new protocol.server(constants.port);
 

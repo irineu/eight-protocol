@@ -1,4 +1,4 @@
-var protocol = require("eight-protocol");
+var protocol = require("../../index");
 var client = new protocol.client("0.0.0.0", 7890);
 var readline = require('readline');
 
@@ -24,7 +24,7 @@ client.on("data", function(socket, header, dataBuffer){
     switch(header.transaction){
     	case "ID":
     		rl.question('Type your name: ', (answer) => {
-				protocol.send(socket, {transaction : "IDx", date : Date.now()}, answer);
+				protocol.send(socket, {transaction : "ID", date : Date.now()}, answer);
 			});
     	break;
     	case "WELCOME":

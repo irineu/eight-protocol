@@ -1,4 +1,4 @@
-var protocol = require("eight-protocol");
+var protocol = require("../../index");
 var server =  new protocol.server(7890);
 
 //A map for store active connections
