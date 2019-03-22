@@ -40,14 +40,18 @@ ProtocolServer.prototype.setup = function(){
 		socket.on('data', function(data){
 
 			if(instance.debug) console.log("EP","IN",socket.remoteAddress +":"+socket.remotePort,data.length);
-				
+
 			module.exports.recieve(this,data,function(socket,headerBuffer,dataBuffer){
-				
-				var header = JSON.parse(headerBuffer);
-				if(header.transaction == "HEARTBEAT"){
-					//ignore
-				}else{
-					instance.emit("data",socket,header,dataBuffer);
+				try{
+					var header = JSON.parse(headerBuffer);
+					if(header.transaction == "HEARTBEAT"){
+						//ignore
+					}else{
+						instance.emit("data",socket,header,dataBuffer);
+					}
+				}catch(e){
+					console.error(e.message);
+					console.error(e.stack);
 				}
 			});
         });
@@ -89,13 +93,14 @@ util.inherits(ProtocolClient, events.EventEmitter);
 
 ProtocolClient.prototype.reconnect = function(){
 	var instance = this;
-	instance.socket.connect(instance.port,instance.ip);
+	this.setup();
+	//instance.socket.connect(instance.port,instance.ip);
 }
 
 ProtocolClient.prototype.setup = function(){
 	var instance = this;
 	instance.socket = new net.Socket();
-	
+
 	instance.socket.connect(instance.port,instance.ip);
 
 	instance.socket.on('connect', function(){
@@ -123,7 +128,7 @@ ProtocolClient.prototype.setup = function(){
 			}else{
 				instance.emit("data",socket,header,dataBuffer);
 			}
-			
+
 		});
 	});
 
@@ -192,12 +197,12 @@ module.exports = {
             if(clientSocket.chunck.bufferStack.length >= 8){
             	clientSocket.chunck.headerSize = clientSocket.chunck.bufferStack.readInt32LE(4);
             }
-            
+
             if (clientSocket.chunck.messageSize != 0 && clientSocket.chunck.bufferStack.length >= clientSocket.chunck.messageSize) {
 
                 var bufferHeader = clientSocket.chunck.bufferStack.slice(8, clientSocket.chunck.headerSize + 8);
                 var bufferData = clientSocket.chunck.bufferStack.slice(clientSocket.chunck.headerSize + 8, clientSocket.chunck.messageSize);
-                
+
                 clientSocket.chunck.messageSize = 0;
                 clientSocket.chunck.headerSize = 0;
 
