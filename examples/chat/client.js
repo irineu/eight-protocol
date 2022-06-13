@@ -1,9 +1,11 @@
-var protocol = require("../../index");
+import protocol from "../../index.js";
+import readline from 'readline';
+
 var client = new protocol.client("0.0.0.0", 7890);
-var readline = require('readline');
+
 
 //this is a way for easily read lines, see more at: https://nodejs.org/api/readline.html
-rl = readline.createInterface({
+let rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });

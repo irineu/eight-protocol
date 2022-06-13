@@ -1,4 +1,5 @@
-var protocol = require("../../index");
+import protocol from "../../index.js";
+
 var server =  new protocol.server(7890);
 
 //A map for store active connections
@@ -18,12 +19,14 @@ server.on('client_connected', function(socketClient){
 });
 
 server.on('client_close', function(socketClient){
-	//broadcast the goodbye message
+
+	//Delete the reference of the user in our map
+    delete activeConnections[socketClient.id];
+
+	//broadcast the goodbye message to the others
 	Object.keys(activeConnections).forEach(function(k){
 		protocol.send(activeConnections[k], {transaction : "MESSAGE", date : Date.now()}, socketClient.name+" was left!");
 	});
-	//Delete the reference of the user in our map
-    delete activeConnections[socketClient.id];
     console.log("ONLINE USERS: "+Object.keys(activeConnections).length)
 });
 
