@@ -8,9 +8,9 @@ The eight protocol is an implementation plug-and-play of a transparent protocol 
 
 The message transfered is distributed in two sections:
 ##### Header
-A Key/Value object to identify the message (parameter: transaction, id, token, type, etc...), you can set any object.
+A Key/Value object to identify the message (like: transaction, id, token, type, etc...) like an HTTP header. It will be transformed into a JSON.
 ##### Body
-Binary Data, you can pass anything here
+Binary Data, you can pass anything here (Strings, Serialized Objects, Images, Files, etc...) you can use the header do describe the content of the message.
 
 ## Quick Start
 
