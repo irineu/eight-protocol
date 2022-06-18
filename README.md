@@ -1,6 +1,9 @@
 # eight-protocol [![Build Status](https://travis-ci.org/irineu/eight-protocol.svg?branch=master)](https://travis-ci.org/irineu/eight-protocol)
 NodeJS socket communication lib over a protocol with 8 bytes descriptor 
 
+### Deprecation disclaimer:
+This project will not be longer updated. Hachi NIO Protocol works like the 8-protocol but will have much more features. Please check: [https://github.com/irineu/hachi-nio-js](https://github.com/irineu/hachi-nio-js)
+
 ## Objective
 When you test a simple socket communication, in the more of times everything works fine, but when your project grow up, after publish and test with remote and bad connections, you will get some problems with truncated messages or messages with extra data (part of the next message). It is normal. You will need create a protocol to handle that situation, maybe implement a header or a terminator (bad ideia), maybe you are already frustated with that notice.
 
