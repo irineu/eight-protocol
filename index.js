@@ -1,7 +1,7 @@
-var net = require('net');
-var events = require('events');
-var uuid = require("node-uuid");
-var util = require('util');
+import net from 'net';
+import events  from 'events';
+import { v4 as uuidv4 } from 'uuid';
+import util from 'util';
 /**
 * Server Impl
 **/
@@ -19,12 +19,12 @@ ProtocolServer.prototype.setup = function(){
 	var instance = this;
 	instance.server = net.createServer(function(socket){
 
-		socket.id = uuid.v4();
+		socket.id = uuidv4();
 		socket.chunck = {
 			messageSize : 0,
 			headerSize:0,
-			buffer: new Buffer(0),
-			bufferStack: new Buffer(0)
+			buffer: Buffer.alloc(0),
+			bufferStack: Buffer.alloc(0)
 		};
 
 		instance.emit("client_connected",socket);
@@ -41,7 +41,7 @@ ProtocolServer.prototype.setup = function(){
 
 			if(instance.debug) console.log("EP","IN",socket.remoteAddress +":"+socket.remotePort,data.length);
 
-			module.exports.recieve(this,data,function(socket,headerBuffer,dataBuffer){
+			protocol.recieve(this,data,function(socket,headerBuffer,dataBuffer){
 				try{
 					var header = JSON.parse(headerBuffer);
 					if(header.transaction == "HEARTBEAT"){
@@ -107,8 +107,8 @@ ProtocolClient.prototype.setup = function(){
 		this.chunck = {
 			messageSize : 0,
 			headerSize:0,
-			buffer: new Buffer(0),
-			bufferStack: new Buffer(0)
+			buffer: Buffer.alloc(0),
+			bufferStack: Buffer.alloc(0)
 		};
 
 		this.setTimeout(10000,function(){
@@ -121,7 +121,7 @@ ProtocolClient.prototype.setup = function(){
 
 		if(instance.debug) console.log("EP","IN",instance.socket.remoteAddress +":"+instance.socket.remotePort,data.length);
 
-		module.exports.recieve(this,data,function(socket,headerBuffer,dataBuffer){
+		protocol.recieve(this,data,function(socket,headerBuffer,dataBuffer){
 			var header = JSON.parse(headerBuffer);
 			if(header.transaction == "HEARTBEAT"){
 				//ignore
@@ -141,7 +141,7 @@ ProtocolClient.prototype.setup = function(){
 	});
 
 	instance.socket.on('timeout', function(){
-		module.exports.send(this, {transaction:"HEARTBEAT", type: "REQUEST",id:module.exports.generateId("HB")},"");
+		protocol.send(this, {transaction:"HEARTBEAT", type: "REQUEST",id:protocol.generateId("HB")},"");
 		instance.emit("client_timeout",this);
 	});
 
@@ -153,7 +153,7 @@ ProtocolClient.prototype.setup = function(){
 		instance.socket.setTimeout(instance.timeout);
 };
 
-module.exports = {
+let protocol = {
 	client : ProtocolClient,
 	server : ProtocolServer,
     send: function(clientSocket, header, data, callback) {
@@ -162,9 +162,9 @@ module.exports = {
     		return console.error("EP","OUT","SOCKET IS DESTROYED!");
     	}
 
-        var bufferHeader = new Buffer(JSON.stringify(header), "utf8");
-        var bufferData = new Buffer(data, "utf8");
-        var consolidatedBuffer = new Buffer(8 + bufferHeader.length + bufferData.length);
+        var bufferHeader = Buffer.from(JSON.stringify(header), "utf8");
+        var bufferData = Buffer.from(data, "utf8");
+        var consolidatedBuffer = Buffer.alloc(8 + bufferHeader.length + bufferData.length);
 
         consolidatedBuffer.writeInt32LE(bufferHeader.length + bufferData.length + 8, 0);
         consolidatedBuffer.writeInt32LE(bufferHeader.length, 4);
@@ -217,3 +217,5 @@ module.exports = {
         } while (reCheck);
     }
 }
+
+export default protocol;
